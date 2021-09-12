@@ -3,10 +3,11 @@
     <h1 style="text-align: center">上传覆盖率ec文件</h1>
     <el-upload
       class="upload-demo"
-      action="http://192.168.3.39:8090/WebServer/JacocoApi/uploadEcFile"
+      action="http://127.0.0.1:8090/WebServer/JacocoApi/uploadEcFile"
       :on-preview="handlePreview"
       :on-remove="handleRemove"
       :before-remove="beforeRemove"
+      :data="otherData"
       multiple
       :limit="3"
       :on-exceed="handleExceed"
@@ -27,6 +28,10 @@
 export default {
   data() {
     return {
+      otherData: {
+        appName: "android",
+        versionCode: "3.8.1",
+      },
       fileList: [
         // {
         //   name: "food.jpeg",
@@ -50,17 +55,13 @@ export default {
       );
     },
     handleSucceed() {
-      this.$message.success(
-        `上传成功`
-      );
+      this.$message.success(`上传成功`);
     },
     handleError(err) {
-        let {type} = err
-        //debugger
-        //function(err, file, fileList)
-      this.$message.error(
-        `上传失败${type ? ':' + type : ''}`
-      );
+      let { type } = err;
+      //debugger
+      //function(err, file, fileList)
+      this.$message.error(`上传失败${type ? ":" + type : ""}`);
     },
     beforeRemove(file, fileList) {
       return this.$confirm(`确定移除 ${file.name}？`);
