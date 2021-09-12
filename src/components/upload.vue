@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1 style="text-align: center">上传报告</h1>
+    <h1 style="text-align: center">上传覆盖率ec文件</h1>
     <el-upload
       class="upload-demo"
       action="http://192.168.3.39:8090/WebServer/JacocoApi/uploadEcFile"
@@ -10,9 +10,13 @@
       multiple
       :limit="3"
       :on-exceed="handleExceed"
+      :on-success="handleSucceed"
+      :on-error="handleError"
       :file-list="fileList"
     >
-      <el-button size="small" type="primary">点击上传APP生成的覆盖率文件</el-button>
+      <el-button size="small" type="primary"
+        >点击上传APP生成的覆盖率文件</el-button
+      >
       <div slot="tip" class="el-upload__tip">
         如：/Sdcard/Android/packagename/Cache/jacoco/xxx.ec
       </div>
@@ -43,6 +47,19 @@ export default {
         `当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${
           files.length + fileList.length
         } 个文件`
+      );
+    },
+    handleSucceed() {
+      this.$message.success(
+        `上传成功`
+      );
+    },
+    handleError(err) {
+        let {type} = err
+        debugger
+        //function(err, file, fileList)
+      this.$message.error(
+        `上传失败${type ? ':' + type : ''}`
       );
     },
     beforeRemove(file, fileList) {
