@@ -12,8 +12,8 @@ export default {
   },
   methods: {
     download(){
-      window.open("http://192.168.3.39:8090/download/cc-android/3.8.1/铭牌图鉴.jpeg")
-      //window.open("http://192.168.3.39:8090/WebServer/JacocoApi/queryEcFile?appName=cc-android&versionCode=3.8.1")
+      window.open("http://192.168.3.39:8090/download/android/3.8.1/duqian.png")
+      //window.open("http://192.168.3.39:8090/WebServer/JacocoApi/queryEcFile?appName=android&versionCode=3.8.1")
     }
   },
 };

@@ -7,9 +7,9 @@
       <el-tab-pane label="上传EC文件" name="second">
          <upload/>
       </el-tab-pane>
-      <el-tab-pane label="下载EC文件" name="third"><download/></el-tab-pane>
+      <el-tab-pane label="下载报告" name="third"><download/></el-tab-pane>
       <el-tab-pane label="报告管理" name="fourth">报告管理</el-tab-pane>
-      <el-tab-pane label="联系我们" name="fifth">联系我们</el-tab-pane>
+      <el-tab-pane label="联系我们" name="fifth">duqian2010@gmail.com</el-tab-pane>
     </el-tabs>
   </div>
 </template>

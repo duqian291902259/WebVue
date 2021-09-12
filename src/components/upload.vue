@@ -56,7 +56,7 @@ export default {
     },
     handleError(err) {
         let {type} = err
-        debugger
+        //debugger
         //function(err, file, fileList)
       this.$message.error(
         `上传失败${type ? ':' + type : ''}`
