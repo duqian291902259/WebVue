@@ -17,7 +17,7 @@
           <el-option label="dev" value="dev"></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="报告生成时间">
+      <el-form-item label="上传时间">
         <el-col :span="11">
           <el-date-picker
             type="date"
@@ -53,7 +53,7 @@
 
       <div style="text-align: center">
         <el-button type="primary" @click="onSubmit">生成覆盖率报告</el-button>
-        <el-button>在线打开覆盖率报告</el-button>
+        <el-button  @click="openReport">在线打开覆盖率报告</el-button>
         <el-button style="margin-top: 10px">下载覆盖率报告</el-button>
       </div>
 
@@ -84,6 +84,11 @@ export default {
   methods: {
     onSubmit() {
       console.warn(this.form);
+    },
+    openReport() {
+       var url = "http://127.0.0.1:8090/temp/cc/index.html"
+       window.open(url)
+      console.warn(`open url ${url}`);
     },
   },
 };
