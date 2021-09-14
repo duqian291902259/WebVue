@@ -2,9 +2,7 @@
   <div>
     <h1 style="text-align: center">下载覆盖率报告文件</h1>
 
-    <el-button style="text-align: center" @click="download"
-      >下载覆盖率报告文件</el-button
-    >
+    <el-button style="text-align: center" @click="download" >下载覆盖率报告文件</el-button>
 
     <button @click="downFile">coverage.ec</button>
 
@@ -13,7 +11,7 @@
 </template>
 
 <script>
-import {getUrlParam} from '../utils'
+import { getUrlParam } from "../utils";
 export default {
   data() {
     return {};
@@ -23,41 +21,36 @@ export default {
       window.open("http://127.0.0.1:8090/download/android/3.8.1/duqian.png");
       //window.open("http://127.0.0.1:8090/WebServer/JacocoApi/queryEcFile?appName=android&versionCode=3.8.1")
     },
-    // download2() {
-    //   window.open(
-    //     "http://127.0.0.1:8090/download?path=download/cc-android/3.8.1/coverage.ec"
-    //   );
-    // },
+    
     downFile() {
-      let url= 'http://127.0.0.1:8090/download?path=download/cc-android/3.8.1/&fileName=coverage.ec',
-      fileName = getUrlParam(url, 'fileName'),
-       _this = this,
-       url2 = url.replace(/\\/g, '/'),
-       xhr = new XMLHttpRequest()
-       debugger
-      xhr.open('GET', url2, true)
-      xhr.responseType = 'blob'
-      xhr.onload = () => {
-        if (xhr.status === 200) {
-          // 获取文件blob数据并保存
-          _this.saveAs(xhr.response, fileName)
-        }
-      }
-      xhr.send()
+      let url = "http://127.0.0.1:8090/download?path=download/cc-android/3.8.1/&fileName=coverage.ec",
+        fileName = getUrlParam(url, "fileName"),
+        _this = this,
+        url2 = url.replace(/\\/g, "/"),
+        xhr = new XMLHttpRequest();
+        xhr.open("GET", url2, true);
+        xhr.responseType = "blob";
+        xhr.onload = () => {
+          if (xhr.status === 200) {
+            // 获取文件blob数据并保存
+            _this.saveAs(xhr.response, fileName);
+          }
+        };
+      xhr.send();
     },
-    saveAs(data,fileName) {
-      const urlObject = window.URL || window.webkitURL || window
-      const export_blob = new Blob([data])
+    saveAs(data, fileName) {
+      const urlObject = window.URL || window.webkitURL || window;
+      const export_blob = new Blob([data]);
       //createElementNS() 方法可创建带有指定命名空间的元素节点。
       //此方法可返回一个 Element 对象。
       const save_link = document.createElementNS(
-        'http://www.w3.org/1999/xhtml',
-        'a'
-      )
-      save_link.href = urlObject.createObjectURL(export_blob)
-      save_link.download = fileName
-      save_link.click()
-    }
+        "http://www.w3.org/1999/xhtml",
+        "a"
+      );
+      save_link.href = urlObject.createObjectURL(export_blob);
+      save_link.download = fileName;
+      save_link.click();
+    },
   },
 };
 </script>
