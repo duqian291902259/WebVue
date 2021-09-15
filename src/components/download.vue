@@ -18,8 +18,7 @@ export default {
   },
   methods: {
     download() {
-      window.open("http://127.0.0.1:8090/download/android/3.8.1/duqian.png");
-      //window.open("http://127.0.0.1:8090/WebServer/JacocoApi/queryEcFile?appName=android&versionCode=3.8.1")
+      window.open("http://127.0.0.1:8090/download/android/3.8.1/coverage.ec");
     },
     
     downFile() {
