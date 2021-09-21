@@ -3,9 +3,9 @@
     <h1 style="text-align: center">Android覆盖率报告</h1>
     <el-form ref="form" :model="form" label-width="100px" label-position="left">
       <el-form-item label="应用名称">
-        <el-input v-model="form.appName" value="Android" label="Android"
-          >Android</el-input
-        >
+        <el-radio-group v-model="form.appName">
+          <el-radio label="CC-Android"></el-radio>
+        </el-radio-group>
       </el-form-item>
       <el-form-item label="git分支名称">
         <el-select v-model="form.branch" placeholder="请选择生成报告的分支">
@@ -38,12 +38,12 @@
       <el-form-item label="增量覆盖率">
         <el-switch v-model="form.incremental"></el-switch>
       </el-form-item>
-      <el-form-item label="生成条件">
+      <!-- <el-form-item label="生成条件">
         <el-checkbox-group v-model="form.condition">
           <el-checkbox label="追加" name="type"></el-checkbox>
           <el-checkbox label="覆盖旧版" name="type"></el-checkbox>
         </el-checkbox-group>
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item label="开发环境">
         <el-radio-group v-model="form.env">
           <el-radio label="Debug"></el-radio>
@@ -65,17 +65,17 @@
 </template>
 
 <script>
+import {get, post} from '../utils/fetch'
 export default {
   data: function () {
     return {
       form: {
         appName: "CC-Android",
-        branch: "dev",
-        base_branch: "master",
+        //branch: "",
+        //base_branch: "master",
         date1: "",
         date2: "",
         incremental: false,
-        condition: ["追加"],
         env: 'Debug',
         desc: "",
       },
@@ -84,6 +84,20 @@ export default {
   methods: {
     onSubmit() {
       console.warn(this.form);
+      get('http://127.0.0.1:8090/user/test', this.form).then((res)=>{
+        console.warn(res)
+      }).catch(error=>{
+        console.error(error)
+      })
+
+      post('http://127.0.0.1:8090/WebServer/JacocoApi/uploadEcFile', Object.assign({}, this.form, {
+        appName:"dq-test",
+        versionCode:"3.8.1"
+      })).then((res)=>{
+        console.warn(res)
+      }).catch(error=>{
+        console.error(error)
+      })
     },
     openReport() {
        var url = "http://127.0.0.1:8090/temp/cc/index.html"
