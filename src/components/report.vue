@@ -90,14 +90,14 @@ export default {
         console.error(error)
       })
 
-      requestPost('http://127.0.0.1:8090/WebServer/JacocoApi/uploadEcFile', Object.assign({}, this.form, {
-        appName:"dq-test",
-        versionCode:"3.8.1"
-      })).then((res)=>{
-        console.warn(res)
-      }).catch(error=>{
-        console.error(error)
-      })
+      // requestPost('http://127.0.0.1:8090/WebServer/JacocoApi/uploadEcFile', Object.assign({}, this.form, {
+      //   appName:"dq-test",
+      //   versionCode:"3.8.1"
+      // })).then((res)=>{
+      //   console.warn(res)
+      // }).catch(error=>{
+      //   console.error(error)
+      // })
     },
     openReport() {
        var url = "http://127.0.0.1:8090/temp/cc/index.html"
