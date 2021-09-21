@@ -1,6 +1,6 @@
 const axios = require('axios');
 
-function post(url, params) {
+function requestPost(url, params) {
     return new Promise((resolve, reject)=>{
         axios.post(url, params).then(function (response) {
             resolve(response);
@@ -11,7 +11,7 @@ function post(url, params) {
     })
 }
 
-function get(url, params) {
+function requestGet(url, params) {
     return new Promise((resolve, reject)=>{
         axios.get(url, {
             params:{...params}
@@ -23,5 +23,5 @@ function get(url, params) {
         });
     })
 }
-export {post, get}
+export {requestPost, requestGet}
 

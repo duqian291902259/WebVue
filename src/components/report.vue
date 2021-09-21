@@ -65,7 +65,7 @@
 </template>
 
 <script>
-import {get, post} from '../utils/fetch'
+import {requestGet, requestPost} from '../utils/fetch'
 export default {
   data: function () {
     return {
@@ -84,13 +84,13 @@ export default {
   methods: {
     onSubmit() {
       console.warn(this.form);
-      get('http://127.0.0.1:8090/user/test', this.form).then((res)=>{
+      requestGet('http://127.0.0.1:8090/user/test', this.form).then((res)=>{
         console.warn(res)
       }).catch(error=>{
         console.error(error)
       })
 
-      post('http://127.0.0.1:8090/WebServer/JacocoApi/uploadEcFile', Object.assign({}, this.form, {
+      requestPost('http://127.0.0.1:8090/WebServer/JacocoApi/uploadEcFile', Object.assign({}, this.form, {
         appName:"dq-test",
         versionCode:"3.8.1"
       })).then((res)=>{
