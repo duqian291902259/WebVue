@@ -1,5 +1,5 @@
 <template>
-  <div id="app" style="width:60%;margin:20px auto;max-width:700px;">
+  <div id="app" style="width:60%;margin:20px auto;max-width:720px;">
      <el-tabs v-model="activeName">
       <el-tab-pane label="Android覆盖率报告" name="first">
         <report></report>

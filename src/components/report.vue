@@ -14,11 +14,11 @@
         </el-select> -->
         <el-input
           v-model="form.branch"
-          style="width: 300px"
-          placeholder="请填写覆盖率报告对应的分支名称"
+          style="width: 310px"
+          placeholder="请填写对应的分支名称,或提交记录的SHA值"
         >
         </el-input>
-        <span style="width: 50px"> VS </span>
+        <span style="width: 50px"> --VS-- </span>
         <el-select v-model="form.base_branch" placeholder="请选择对比的分支">
           <el-option
             label="请选择对比的分支"
