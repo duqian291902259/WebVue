@@ -19,13 +19,11 @@
         >
         </el-input>
         <span style="width: 50px"> --VS-- </span>
-        <el-select v-model="form.base_branch" placeholder="请选择对比的分支">
-          <el-option
-            label="请选择对比的分支"
-            value="请选择对比的分支"
-          ></el-option>
-          <el-option label="master" value="master"></el-option>
-          <el-option label="dev" value="dev"></el-option>
+        <el-select v-model="form.base_branch" placeholder="请选择对比的分支" clearable>
+          <el-option-group label="请选择对比的分支">
+            <el-option label="master" value="master"></el-option>
+            <el-option label="dev" value="dev"></el-option>
+          </el-option-group>
         </el-select>
       </el-form-item>
       <el-form-item label="上传时间">
@@ -98,7 +96,8 @@ export default {
       requestGet("http://127.0.0.1:8090/user/test", this.form)
         .then((res) => {
           console.warn(res);
-          var msg = "覆盖率报告已生成，请点击在线查阅或下载...";
+          let {data: {data=''}} = res || {data: {}}
+          let msg = `覆盖率报告已生成，请点击在线查阅或下载...${data}`;
           this.form.desc = msg;
           this.$message.success(msg);
         })
