@@ -7,12 +7,23 @@
           <el-radio label="CC-Android"></el-radio>
         </el-radio-group>
       </el-form-item>
-      <el-form-item label="git分支名称">
-        <el-select v-model="form.branch" placeholder="请选择生成报告的分支">
+      <el-form-item label="Git分支名称">
+        <!-- <el-select v-model="form.branch" placeholder="请选择生成报告的分支">
           <el-option label="master" value="master"></el-option>
           <el-option label="dev" value="dev"></el-option>
-        </el-select>
+        </el-select> -->
+        <el-input
+          v-model="form.branch"
+          style="width: 300px"
+          placeholder="请填写覆盖率报告对应的分支名称"
+        >
+        </el-input>
+        <span style="width: 50px"> VS </span>
         <el-select v-model="form.base_branch" placeholder="请选择对比的分支">
+          <el-option
+            label="请选择对比的分支"
+            value="请选择对比的分支"
+          ></el-option>
           <el-option label="master" value="master"></el-option>
           <el-option label="dev" value="dev"></el-option>
         </el-select>
@@ -51,10 +62,10 @@
         </el-radio-group>
       </el-form-item>
 
-      <div style="text-align: center">
+      <div style="text-align: center; margin: 10px">
         <el-button type="primary" @click="onSubmit">生成覆盖率报告</el-button>
-        <el-button  @click="openReport">在线打开覆盖率报告</el-button>
-        <el-button style="margin-top: 10px">下载覆盖率报告</el-button>
+        <el-button @click="openReport">在线查看覆盖率报告</el-button>
+        <el-button @click="downloadReport" style="margin-top: 10px">下载覆盖率报告</el-button>
       </div>
 
       <el-form-item label="提示信息" v-if="form.desc">
@@ -65,18 +76,18 @@
 </template>
 
 <script>
-import {requestGet, requestPost} from '../utils/fetch'
+import { requestGet, requestPost } from "../utils/fetch";
 export default {
   data: function () {
     return {
       form: {
         appName: "CC-Android",
-        //branch: "",
-        //base_branch: "master",
+        branch: "dev_#411671_coverage",
+        base_branch: "master",
         date1: "",
         date2: "",
         incremental: false,
-        env: 'Debug',
+        env: "Debug",
         desc: "",
       },
     };
@@ -84,11 +95,19 @@ export default {
   methods: {
     onSubmit() {
       console.warn(this.form);
-      requestGet('http://127.0.0.1:8090/user/test', this.form).then((res)=>{
-        console.warn(res)
-      }).catch(error=>{
-        console.error(error)
-      })
+      requestGet("http://127.0.0.1:8090/user/test", this.form)
+        .then((res) => {
+          console.warn(res);
+          var msg = "覆盖率报告已生成，请点击在线查阅或下载...";
+          this.form.desc = msg;
+          this.$message.success(msg);
+        })
+        .catch((error) => {
+          console.error(error);
+          var errorMsg = `覆盖率报告生成失败... ${error}`;
+          this.form.desc = errorMsg;
+          this.$message.error(errorMsg);
+        });
 
       // requestPost('http://127.0.0.1:8090/WebServer/JacocoApi/uploadEcFile', Object.assign({}, this.form, {
       //   appName:"dq-test",
@@ -99,10 +118,22 @@ export default {
       //   console.error(error)
       // })
     },
+
     openReport() {
-       var url = "http://127.0.0.1:8090/temp/cc/index.html"
-       window.open(url)
+      var url = "http://127.0.0.1:8090/temp/cc-start-coverage/index.html";
+      if(this.form.incremental==false){
+        url = "http://127.0.0.1:8090/temp/cc-all-coverage/index.html";
+      }
+      window.open(url);
       console.warn(`open url ${url}`);
+    },
+    downloadReport() {
+      var url = "http://127.0.0.1:8090/temp/cc-start-coverage.rar";
+      if(this.form.incremental==false){
+        url = "http://127.0.0.1:8090/temp/cc-all-coverage.rar";
+      }
+      window.open(url);
+      console.warn(`download url ${url}`);
     },
   },
 };

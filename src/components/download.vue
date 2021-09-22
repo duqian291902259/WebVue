@@ -1,12 +1,10 @@
 <template>
   <div>
-    <h1 style="text-align: center">下载覆盖率报告文件</h1>
+    <h1 style="text-align: center">覆盖率报告文件列表</h1>
 
     <el-button style="text-align: center" @click="download" >下载覆盖率报告文件</el-button>
 
-    <button @click="downFile">coverage.ec</button>
-
-    <!-- <a style="text-align: center;margin-top:20px;float:left;" herf="http://127.0.0.1:8090/download?path=download/cc-android/3.8.1/coverage.ec">coverage.ec</a> -->
+    <button @click="downFile">coverage</button>
   </div>
 </template>
 
@@ -18,7 +16,7 @@ export default {
   },
   methods: {
     download() {
-      window.open("http://127.0.0.1:8090/download/android/3.8.1/coverage.ec");
+      window.open("http://127.0.0.1:8090/temp/cc-start-coverage.rar");
     },
     
     downFile() {

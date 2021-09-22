@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1 style="text-align: center">上传覆盖率ec文件</h1>
+    <h1 style="text-align: center">上传覆盖率文件、APK等</h1>
     <el-upload
       class="upload-demo"
       action="http://127.0.0.1:8090/WebServer/JacocoApi/uploadEcFile"
