@@ -102,15 +102,9 @@ export default {
       requestGet("http://127.0.0.1:8090/coverage/report", this.form)
         .then((res) => {
           console.warn(res);
-          let {
-            data: { data = "" },
-          } = res || { data: {} };
-          // let {
-          //   result: { result = 10 },
-          // } = res
-        
-          let result = 0
-          let msg = `覆盖率报告已生成，请点击在线查阅或下载..${data}`;
+          
+          let {result = 0,data = ""}= res
+          let msg = `覆盖率报告已生成，请点击在线查阅或下载..${data.result}.${data.data}`;
           if (result != 0) {
             msg = `覆盖率报告生成失败了，呜呜...${data}`;
           }
