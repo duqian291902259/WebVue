@@ -98,6 +98,7 @@ export default {
   },
   methods: {
     onSubmit() {
+      this.$message.success("正在处理，请稍后查阅...");
       console.warn(this.form);
       requestGet("http://127.0.0.1:8090/coverage/report", this.form)
         .then((res) => {
