@@ -86,7 +86,7 @@ export default {
     return {
       form: {
         appName: "CC-Android",
-        branch: "dev_#411671_coverage",
+        branch: "dev_dq_#411671_coverage",
         base_branch: "master",
         date1: "",
         date2: "",
@@ -104,7 +104,7 @@ export default {
           console.warn(res);
           
           let {result = 0,data = ""}= res
-          let msg = `覆盖率报告已生成，请点击在线查阅或下载..${data.result}.${data.data}`;
+          let msg = `覆盖率报告已生成，请点击在线查阅或下载...${data.data}`;
           if (result != 0) {
             msg = `覆盖率报告生成失败了，呜呜...${data}`;
           }
