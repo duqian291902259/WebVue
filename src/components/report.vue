@@ -19,7 +19,11 @@
         >
         </el-input>
         <span style="width: 50px"> --VS-- </span>
-        <el-select v-model="form.base_branch" placeholder="请选择对比的分支" clearable>
+        <el-select
+          v-model="form.base_branch"
+          placeholder="请选择对比的分支"
+          clearable
+        >
           <el-option-group label="请选择对比的分支">
             <el-option label="master" value="master"></el-option>
             <el-option label="dev" value="dev"></el-option>
@@ -63,7 +67,9 @@
       <div style="text-align: center; margin: 10px">
         <el-button type="primary" @click="onSubmit">生成覆盖率报告</el-button>
         <el-button @click="openReport">在线查看覆盖率报告</el-button>
-        <el-button @click="downloadReport" style="margin-top: 10px">下载覆盖率报告</el-button>
+        <el-button @click="downloadReport" style="margin-top: 10px"
+          >下载覆盖率报告</el-button
+        >
       </div>
 
       <el-form-item label="提示信息" v-if="form.desc">
@@ -93,11 +99,21 @@ export default {
   methods: {
     onSubmit() {
       console.warn(this.form);
-      requestGet("http://127.0.0.1:8090/user/test", this.form)
+      requestGet("http://127.0.0.1:8090/coverage/report", this.form)
         .then((res) => {
           console.warn(res);
-          let {data: {data=''}} = res || {data: {}}
-          let msg = `覆盖率报告已生成，请点击在线查阅或下载...${data}`;
+          let {
+            data: { data = "" },
+          } = res || { data: {} };
+          // let {
+          //   result: { result = 10 },
+          // } = res
+        
+          let result = 0
+          let msg = `覆盖率报告已生成，请点击在线查阅或下载..${data}`;
+          if (result != 0) {
+            msg = `覆盖率报告生成失败了，呜呜...${data}`;
+          }
           this.form.desc = msg;
           this.$message.success(msg);
         })
@@ -108,7 +124,7 @@ export default {
           this.$message.error(errorMsg);
         });
 
-      // requestPost('http://127.0.0.1:8090/WebServer/JacocoApi/uploadEcFile', Object.assign({}, this.form, {
+      // requestPost('http://127.0.0.1:8090/coverage/upload', Object.assign({}, this.form, {
       //   appName:"dq-test",
       //   versionCode:"3.8.1"
       // })).then((res)=>{
@@ -120,7 +136,7 @@ export default {
 
     openReport() {
       var url = "http://127.0.0.1:8090/temp/cc-start-coverage/index.html";
-      if(this.form.incremental==false){
+      if (this.form.incremental == false) {
         url = "http://127.0.0.1:8090/temp/cc-all-coverage/index.html";
       }
       window.open(url);
@@ -128,7 +144,7 @@ export default {
     },
     downloadReport() {
       var url = "http://127.0.0.1:8090/temp/cc-start-coverage.rar";
-      if(this.form.incremental==false){
+      if (this.form.incremental == false) {
         url = "http://127.0.0.1:8090/temp/cc-all-coverage.rar";
       }
       window.open(url);

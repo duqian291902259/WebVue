@@ -3,7 +3,7 @@
     <h1 style="text-align: center">上传覆盖率文件、APK等</h1>
     <el-upload
       class="upload-demo"
-      action="http://127.0.0.1:8090/WebServer/JacocoApi/uploadEcFile"
+      action="http://127.0.0.1:8090/coverage/upload"
       :on-preview="handlePreview"
       :on-remove="handleRemove"
       :before-remove="beforeRemove"
