@@ -10,36 +10,40 @@
       <el-form-item label="Git分支名称">
         <el-select
           v-model="form.branch"
-          placeholder="请选择当前生成报告的分支"
-          style="width: 380px"
+          placeholder="请选择生成报告的分支"
+          style="width: 350px"
         >
-          <el-option-group label="请选择当前生成报告的分支">
-            <el-option label="master" value="master"></el-option>
-            <el-option label="dev" value="dev"></el-option>
+          <el-option-group
+            :label="group.label"
+            v-for="group in groups"
+            :key="group.label"
+          >
             <el-option
-              label="dev_dq_#411671_coverage"
-              value="dev_dq_#411671_coverage"
+              v-for="item in group.options"
+              :label="item.label"
+              :value="item.value"
+              :key="item.value"
             ></el-option>
           </el-option-group>
         </el-select>
         <span style="width: 50px"> -- </span>
         <el-select
           v-model="form.base_branch"
-          placeholder="请选择对比的分支"
+          placeholder="可选择对比的分支"
           clearable
         >
-          <el-option-group label="请选择对比的分支">
+          <el-option-group label="可选择对比的分支">
             <el-option label="master" value="master"></el-option>
             <el-option label="dev" value="dev"></el-option>
           </el-option-group>
         </el-select>
       </el-form-item>
 
-      <el-form-item label="当前CommitId">
+      <el-form-item label="起始CommitId">
         <el-input
           v-model="form.commitId"
-          style="width: 380px"
-          placeholder="当前apk对应的commit-id"
+          style="width: 350px"
+          placeholder="安装apk对应的commit-id"
         >
         </el-input>
       </el-form-item>
@@ -47,12 +51,12 @@
       <el-form-item label="对比CommitId">
         <el-input
           v-model="form.commitId2"
-          style="width: 380px"
+          style="width: 350px"
           placeholder="获取差异的commit-id"
         >
         </el-input>
       </el-form-item>
-      <el-form-item label="ec上传时间">
+      <!-- <el-form-item label="ec上传时间">
         <el-col :span="9">
           <el-date-picker
             type="date"
@@ -69,7 +73,7 @@
             style="width: 250px"
           ></el-time-picker>
         </el-col>
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item label="增量覆盖率">
         <el-switch v-model="form.incremental"></el-switch>
       </el-form-item>
@@ -80,20 +84,15 @@
         </el-radio-group>
       </el-form-item>
 
-      <div style="text-align: center; margin: 10px">
-        <el-button type="primary" @click="onSubmit">生成覆盖率报告</el-button>
-        <el-button @click="openReport" v-model="form.reportUrl"
-          >在线查看覆盖率报告</el-button
-        >
-        <el-button
-          @click="downloadReport"
-          style="margin-top: 10px"
-          v-model="form.reportZipUrl"
+      <div style="text-align: center; margin: 0px">
+        <el-button :loading="isLoading" type="primary" @click="onSubmit">生成覆盖率报告</el-button>
+        <el-button ref="btn_report_online" @click="openReport">在线查看覆盖率报告</el-button>
+        <el-button ref="btn_report_download" @click="downloadReport" style="margin-top: 10px"
           >下载覆盖率报告</el-button
         >
       </div>
 
-      <el-form-item label="提示信息" v-if="form.desc">
+      <el-form-item label="提示信息" v-if="form.desc"  style="margin-top: 20px">
         <el-input type="textarea" v-model="form.desc"></el-input>
       </el-form-item>
     </el-form>
@@ -101,27 +100,47 @@
 </template>
 
 <script>
-import { requestGet, requestPost } from "../utils/fetch";
+import { requestGet,requestPost } from "../utils/fetch";
+import { jacocoHost,localHost } from "../utils";
 export default {
   data: function () {
     return {
       form: {
         appName: "cc-android",
         branch: "dev_dq_#411671_coverage",
-        base_branch: "dev",
-        commitId:"c8447a2fe972c7925bd1c52e905f91071ee8d5a2",
-        //commitId: "577082371ba3f40f848904baa39083f14b2695b0",
-        commitId2: "855e6c13a7a46b5f63cb6b7d5db3e224d38fb1f8",
+        base_branch: "",
+        commitId: "21acf983",
+        commitId2: "84f1ad08",
         date1: "",
         date2: "",
-        incremental: false,
+        incremental: true,
         env: "Debug",
         desc: "",
-        reportUrl: "",
-        reportZipUrl: "",
       },
+      reportUrl: "",
+      reportZipUrl: "",
+      isLoading: false,
+      groups: [
+        {
+          label: "请选择当前生成报告的分支",
+          options: [
+            {
+              value: "dev",
+              label: "dev",
+            },
+            {
+              value: "dev_dq_#411671_coverage",
+              label: "dev_dq_#411671_coverage",
+            },
+          ],
+        },
+      ],
       response: {},
     };
+  },
+  created(){
+     console.warn(`host=${jacocoHost}`);
+     this.updateSelectList()
   },
   methods: {
     onSubmit() {
@@ -135,9 +154,15 @@ export default {
         return;
       }
 
+      if (this.form.incremental === true && this.form.base_branch===""&& (this.form.commitId2===""||this.form.commitId2 === undefined)) {
+        this.$message.error("增量报告，请填写要对比的CommitId");
+        return;
+      }
+
       this.$message.success("正在处理，请稍后查阅...");
       console.warn(this.form);
-      requestGet("http://127.0.0.1:8090/coverage/report", this.form)
+      this.isLoading = true
+      requestGet(`${jacocoHost}/coverage/report`, this.form)
         .then((res) => {
           console.warn(res);
 
@@ -148,23 +173,25 @@ export default {
           }
           this.form.desc = msg;
           this.$message.success(msg);
-          this.form.reportUrl = data.reportUrl;
-          this.form.reportZipUrl = data.reportZipUrl;
+          this.reportUrl = data.reportUrl;
+          this.reportZipUrl = data.reportZipUrl;
 
-          let logMsg = `reportUrl...${this.form.reportUrl}`;
+          let logMsg = `reportUrl...${this.reportUrl}`;
           console.warn(logMsg);
           console.warn(data.reportZipUrl);
           //this.response = JSON.parse(res.data);
           //console.warn("response =" +this.response);
+          this.isLoading = false;
         })
         .catch((error) => {
           console.error(error);
           var errorMsg = `出错了... ${error}`;
           this.form.desc = errorMsg;
           this.$message.error(errorMsg);
+          this.isLoading = false;
         });
 
-      // requestPost('http://127.0.0.1:8090/coverage/upload', Object.assign({}, this.form, {
+      // requestPost(`${jacocoHost}/coverage/upload`, Object.assign({}, this.form, {
       //   appName:"dq-test",
       //   versionCode:"3.8.1"
       // })).then((res)=>{
@@ -175,7 +202,7 @@ export default {
     },
 
     openReport() {
-      var url = this.form.reportUrl;
+      var url = this.reportUrl;
       if (url === "" || url === undefined) {
         this.$message.error("报告未生成");
         return;
@@ -184,13 +211,25 @@ export default {
       console.warn(`open url ${url}`);
     },
     downloadReport() {
-      var url = this.form.reportZipUrl;
+      var url = this.reportZipUrl;
       if (url === "" || url === undefined) {
         this.$message.error("报告未生成");
         return;
       }
       window.open(url);
       console.warn(`download url ${url}`);
+    },
+    updateSelectList() {
+      requestGet(`${jacocoHost}/api/init`, this.form).then(
+        (res) => {
+          let {data = []} = res || {}
+          this.updateOptions(data);
+        }
+      );
+    },
+    updateOptions(date) {
+      this.$set(this.groups[0], "options", date);
+      this.form.branch = date[0].value;
     },
   },
 };
